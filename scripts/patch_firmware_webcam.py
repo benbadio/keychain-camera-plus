@@ -21,20 +21,11 @@ OUTPUT_FW_PATH = Path(__file__).resolve().parent.parent / "dumps" / "charmera_we
 EXPECTED_STOCK_SHA256 = "cc3b4b2fd7eb71ba5a441decdc86984261fac8418ee3e105d7e2b3c38b7ea42f"
 EXPECTED_SIZE = 2 * 1024 * 1024  # 2,097,152 bytes
 
-# Patch 1: UVC Mode Selection
+# Patch: UVC Mode Selection
 # At 0x022124: replace 'bne #0x22138' (U_DISK.GPZ) with 'nop' to fall through to PC_CAM.GPZ
 PATCH_UVC_MODE_OFFSET = 0x022124
 ORIGINAL_UVC_MODE_BYTES = b"\x03\x00\x00\x1a"  # bne #0x22138
 PATCHED_UVC_MODE_BYTES = b"\x00\x00\xa0\xe1"   # nop (mov r0, r0)
-
-# Patch 2: UVC Task Entry Point Fix
-# At 0x006D10: replace 0x000069E8 (exit stub of 0x69a4) with 0x00006BE8 (uvc_task loop).
-# The factory ROM had an entry point typo (0x69E8 instead of 0x6BE8) which caused
-# OSTaskCreate to start the UVC worker task on an exit stub that popped into PC and died,
-# preventing the UVC message queue from ever reading frames and streaming to USB.
-PATCH_UVC_TASK_OFFSET = 0x006D10
-ORIGINAL_UVC_TASK_BYTES = b"\xe8\x69\x00\x00"  # 0x000069E8
-PATCHED_UVC_TASK_BYTES = b"\xe8\x6b\x00\x00"   # 0x00006BE8
 
 def main():
     print(f"[*] Reading stock firmware: {STOCK_FW_PATH}")
@@ -66,38 +57,22 @@ def main():
     data[PATCH_UVC_MODE_OFFSET:PATCH_UVC_MODE_OFFSET + 4] = PATCHED_UVC_MODE_BYTES
     print(f"[+] Patch 1 (UVC Mode): Patched 0x{PATCH_UVC_MODE_OFFSET:06X} -> {PATCHED_UVC_MODE_BYTES.hex()}")
 
-    # 4. Check and apply Patch 2 (UVC Task Entry Point)
-    cur_bytes_task = bytes(data[PATCH_UVC_TASK_OFFSET:PATCH_UVC_TASK_OFFSET + 4])
-    if cur_bytes_task != ORIGINAL_UVC_TASK_BYTES:
-        print(f"[-] Error: Unexpected bytes at 0x{PATCH_UVC_TASK_OFFSET:06X}: {cur_bytes_task.hex()}, expected {ORIGINAL_UVC_TASK_BYTES.hex()}")
-        sys.exit(1)
-    data[PATCH_UVC_TASK_OFFSET:PATCH_UVC_TASK_OFFSET + 4] = PATCHED_UVC_TASK_BYTES
-    print(f"[+] Patch 2 (UVC Task Entry): Patched 0x{PATCH_UVC_TASK_OFFSET:06X} -> {PATCHED_UVC_TASK_BYTES.hex()} (0x000069E8 -> 0x00006BE8)")
-
-    # 5. Verify byte diff strictly falls within expected patch ranges
+    # 4. Verify byte diff strictly falls within expected patch range
     original_data = STOCK_FW_PATH.read_bytes()
     diffs = [i for i in range(len(data)) if data[i] != original_data[i]]
-    valid_diff_ranges = set(range(PATCH_UVC_MODE_OFFSET, PATCH_UVC_MODE_OFFSET + 4)) | \
-                        set(range(PATCH_UVC_TASK_OFFSET, PATCH_UVC_TASK_OFFSET + 4))
-    if not all(i in valid_diff_ranges for i in diffs) or len(diffs) == 0:
+    if not all(PATCH_UVC_MODE_OFFSET <= i < PATCH_UVC_MODE_OFFSET + 4 for i in diffs) or len(diffs) == 0:
         print(f"[-] Error: Diff anomaly detected! Changed indices: {diffs}")
         sys.exit(1)
-    print(f"[+] Byte diff verification passed: modified exactly {len(diffs)} bytes across 2 designated target patches.")
+    print(f"[+] Byte diff verification passed: modified exactly {len(diffs)} bytes (strictly 0x{PATCH_UVC_MODE_OFFSET:06X}).")
 
-    # 6. Disassemble patched context for Patch 1
+    # 5. Disassemble patched context for Patch 1
     print("\n=== Disassembly Verification: Patch 1 (0x022118 - 0x022148) ===")
     md = capstone.Cs(capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM)
     for insn in md.disasm(data[0x022118:0x022148], 0x022118):
         marker = "===> [PATCH 1]" if insn.address == PATCH_UVC_MODE_OFFSET else "              "
         print(f"{marker} 0x{insn.address:06X}: {insn.bytes.hex():<10} {insn.mnemonic:<8} {insn.op_str}")
 
-    # Disassemble patched context for Patch 2
-    print("\n=== Literal Pool Verification: Patch 2 (0x006D08 - 0x006D18) ===")
-    import struct
-    task_ptr = struct.unpack("<I", data[0x006D10:0x006D14])[0]
-    print(f"===> [PATCH 2] 0x006D10: 0x{task_ptr:08X} (Points to UVC Worker Task loop at 0x006BE8)")
-
-    # 7. Write output file
+    # 6. Write output file
     OUTPUT_FW_PATH.write_bytes(data)
     patched_hash = hashlib.sha256(data).hexdigest()
     print(f"\n[+] Wrote patched firmware: {OUTPUT_FW_PATH}")

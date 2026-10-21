@@ -152,9 +152,6 @@ def main():
     data[UVC_PATCH_OFFSET:UVC_PATCH_OFFSET+4] = b"\x00\x00\xa0\xe1" # mov r0, r0 (nop)
     print("    [+] Patched 0x022124 -> 0000a0e1 (NOP fallthrough to UVC streaming)")
 
-    # Fix UVC Task Entry Point at 0x006D10 (0x69E8 -> 0x6BE8)
-    data[0x006D10:0x006D14] = b"\xe8\x6b\x00\x00"
-    print("    [+] Patched 0x006D10 -> e86b0000 (Fixed UVC Worker Task entry point to 0x006BE8)")
 
     # -------------------------------------------------------------
     # 2. Build & Inject Real-Time Video Filter Hook (0x000050)
