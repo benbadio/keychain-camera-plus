@@ -18,8 +18,8 @@ Turn your **Kodak Charmera** into a vintage, lo-fi **USB-C UVC Webcam** (compati
 
 | Package | Filename | Description |
 | :--- | :--- | :--- |
-| **UVC Webcam Edition** (Recommended) | `JH_5408202610201900_0F065EB9.bin` | Clean, 100% verified UVC webcam mod. |
-| **Super Edition** (Webcam + Filters) | `JH_5408202610201900_0F069EA4.bin` | UVC webcam mod + live Left/Right button color filters (Normal, B&W, Sepia, Negative). |
+| **UVC Webcam Edition** (Recommended) | `JH_5408202610211808_0F065EBB.bin` | Clean, 100% verified UVC webcam mod with live sensor pipeline. |
+| **Super Edition** (Webcam + Filters) | `JH_5408202610211809_0F069EA6.bin` | UVC webcam mod + live Left/Right button color filters (Normal, B&W, Sepia, Negative). |
 
 ---
 
@@ -39,7 +39,7 @@ Turn your **Kodak Charmera** into a vintage, lo-fi **USB-C UVC Webcam** (compati
 2. Ensure the MicroSD card is completely empty.
 
 ### Step 2: Copy the Firmware Update
-1. Copy **ONE** firmware file (e.g. `JH_5408202610201900_0F065EB9.bin`) directly to the **ROOT directory** of your MicroSD card.
+1. Copy **ONE** firmware file (e.g. `JH_5408202610211808_0F065EBB.bin`) directly to the **ROOT directory** of your MicroSD card.
    * *Do NOT rename the file! The camera's bootloader cryptographically validates the timestamp and checksum in the filename.*
 2. Safely eject the MicroSD card from your computer.
 
