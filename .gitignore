@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# macOS hidden files & metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Raw dumps and copyrighted firmware binaries
+dumps/*.bin
+!dumps/.gitkeep
+
+# Extracted partitions and temporary staging
+extracted_assets/
+extracted_fw/
+
+# Distribution archives
+*.zip
+dist/
+build/
