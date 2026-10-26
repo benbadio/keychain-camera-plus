@@ -32,7 +32,7 @@ Copy the `JH_5408*.bin` file directly to the **ROOT** of your MicroSD card.
    ```text
    Upgrade   0%  --->  Upgrade 100%
    ```
-3. When the upgrade completes, **eject the MicroSD card**. The camera will safely power down.
+3. When the upgrade reaches 100%, **eject the MicroSD card**, then **manually power off the camera** by pressing and holding the Power button.
 4. Turn the camera back **ON** and plug it into your Mac or PC via USB-C.
 5. Launch **Photo Booth**, **QuickTime Player** (New Movie Recording), or **Zoom**, select **`GENERAL- UVC`**, and enjoy your retro webcam!
 

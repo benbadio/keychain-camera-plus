@@ -122,8 +122,8 @@ File: {sd_bin_name}
 3. **In-Camera Upgrade**:
    - Insert the MicroSD card into the Kodak Charmera and turn it **ON**.
    - Watch the screen display `Upgrade 0%` -> `100%`.
-   - Once complete, **eject the card** (the camera will shut down safely).
-   - Turn the camera **ON** and plug it into your Mac or PC via USB-C.
+   - When the upgrade reaches 100%, **eject the card**, then **manually power off the camera** by pressing and holding the Power button.
+   - Turn the camera back **ON** and plug it into your Mac or PC via USB-C.
    - Open Photo Booth, QuickTime, Zoom, or FaceTime and select `GENERAL- UVC`!
 
 *(Standalone photo and video shooting on battery remains 100% functional when unplugged!)*

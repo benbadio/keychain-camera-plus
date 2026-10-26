@@ -54,10 +54,11 @@ Turn your **Kodak Charmera** into a vintage, lo-fi **USB-C UVC Webcam** (compati
    *(The upgrade process takes approximately 15–20 seconds. Do not touch any buttons or remove the battery during this step.)*
 5. Once the upgrade reaches **100%**, the camera will pause and wait for you to eject the card.
 
-### Step 4: Eject Card & Reboot
+### Step 4: Eject Card & Power Cycle
 1. **Push and eject the MicroSD card** from the camera.
-2. The camera will instantly detect that the card was removed, play a completion chime, and reboot automatically into custom firmware!
-3. Format or delete the update file from your MicroSD card so the camera doesn't ask to re-flash every time you turn it on.
+2. **Manually power off the camera** by pressing and holding the Power button.
+3. Turn the camera back **ON** by pressing the Power button.
+4. Format or delete the update file from your MicroSD card so the camera doesn't ask to re-flash every time you turn it on with that card.
 
 ### Step 5: Test Your New Webcam!
 1. Connect your Charmera to your Mac or PC using a standard USB-C cable.
