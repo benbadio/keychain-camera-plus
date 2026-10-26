@@ -35,8 +35,9 @@ Copy the `JH_5408*.bin` file directly to the **ROOT** of your MicroSD card.
    Upgrade   0%  --->  Upgrade 100%
    ```
 3. When the upgrade reaches 100%, **eject the MicroSD card**, then **manually power off the camera** by pressing and holding the Power button.
-4. Turn the camera back **ON** and plug it into your Mac or PC via USB-C.
-5. Launch **Photo Booth**, **QuickTime Player** (New Movie Recording), or **Zoom**, select **`GENERAL- UVC`**, and enjoy your retro webcam!
+4. **Delete the `.bin` file from your MicroSD card** (or reformat it) on your computer so the camera doesn't attempt to re-flash the next time the card is inserted.
+5. Turn the camera back **ON** and plug it into your Mac or PC via USB-C.
+6. Launch **Photo Booth**, **QuickTime Player** (New Movie Recording), or **Zoom**, select **`GENERAL- UVC`**, and enjoy your retro webcam!
 
 ---
 
@@ -49,7 +50,8 @@ If you ever wish to revert your camera back to factory original behavior:
 3. Insert the card into your powered-off Kodak Charmera.
 4. Turn the camera **ON** and wait for `Upgrade 0%` $\rightarrow$ `100%`.
 5. When complete, **eject the MicroSD card**, then **manually power off the camera** by pressing and holding the Power button.
-6. Turn the camera back **ON**. Your camera is now 100% restored to factory original firmware (standard USB mass storage).
+6. **Delete the `.bin` file from your MicroSD card** (or reformat it) on your computer so the camera doesn't attempt to re-flash the next time the card is inserted.
+7. Turn the camera back **ON**. Your camera is now 100% restored to factory original firmware (standard USB mass storage).
 
 ---
 

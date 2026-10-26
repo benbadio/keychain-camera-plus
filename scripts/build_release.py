@@ -137,7 +137,8 @@ Factory Restore: {stock_bin_name}
 4. Insert the card into your powered-off Kodak Charmera.
 5. Turn the camera **ON** by pressing the Power button (`Upgrade 0%` -> `100%`).
 6. When the upgrade reaches 100%, **eject the card**, then **manually power off the camera** by pressing and holding the Power button.
-7. Turn the camera back **ON** and plug it into your Mac or PC via USB-C (`GENERAL- UVC`).
+7. **Delete the `.bin` file from your MicroSD card** (or reformat it) on your computer so the camera doesn't attempt to re-flash the next time the card is inserted.
+8. Turn the camera back **ON** and plug it into your Mac or PC via USB-C (`GENERAL- UVC`).
 
 ---
 
@@ -149,7 +150,8 @@ If you ever wish to revert your camera back to 100% factory original behavior:
 4. Insert the card into your powered-off Kodak Charmera.
 5. Turn the camera **ON** by pressing the Power button (`Upgrade 0%` -> `100%`).
 6. When the upgrade reaches 100%, **eject the card**, then **manually power off the camera** by pressing and holding the Power button.
-7. Turn the camera back **ON**. Your camera is now 100% restored to factory original stock firmware.
+7. **Delete the `.bin` file from your MicroSD card** (or reformat it) on your computer so the camera doesn't attempt to re-flash the next time the card is inserted.
+8. Turn the camera back **ON**. Your camera is now 100% restored to factory original stock firmware.
 """
     quickstart_path = out_dir / "QUICKSTART.md"
     quickstart_path.write_text(quickstart_content)

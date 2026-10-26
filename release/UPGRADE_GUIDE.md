@@ -98,4 +98,5 @@ If you ever wish to restore your camera to 100% factory original state:
 2. Copy it directly to the **ROOT** of your FAT32 MicroSD card.
 3. Insert the card into your powered-off camera and press the **Power** button (`Upgrade 0%` -> `100%`).
 4. When the upgrade completes, **eject the MicroSD card**, then **manually power off the camera** by pressing and holding the Power button.
-5. Turn the camera back **ON**. Your camera is now completely restored to factory stock firmware.
+5. **Delete the `.bin` file from your MicroSD card** (or reformat it) on your computer so the camera doesn't attempt to re-flash the next time the card is inserted.
+6. Turn the camera back **ON**. Your camera is now completely restored to factory stock firmware.
