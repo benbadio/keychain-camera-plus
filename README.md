@@ -12,6 +12,8 @@
 * **Zero-Hardware Installation**: Simply copy one `.bin` file to an ordinary FAT32 MicroSD card—**no opening the camera, no soldering, no external programmer required**.
 * **Retains Standalone Camera Operation**: Unplug from USB, and the camera functions normally for taking photos and videos on battery.
 
+> ⚠️ **Disclaimer**: Modifying device firmware carries inherent risks. While this procedure uses the manufacturer's built-in bootloader and has been tested on real hardware, you do this entirely at your own risk. The authors accept no responsibility for bricked devices, data loss, or hardware damage.
+
 ---
 
 ## Installation
@@ -35,6 +37,19 @@ Copy the `JH_5408*.bin` file directly to the **ROOT** of your MicroSD card.
 3. When the upgrade reaches 100%, **eject the MicroSD card**, then **manually power off the camera** by pressing and holding the Power button.
 4. Turn the camera back **ON** and plug it into your Mac or PC via USB-C.
 5. Launch **Photo Booth**, **QuickTime Player** (New Movie Recording), or **Zoom**, select **`GENERAL- UVC`**, and enjoy your retro webcam!
+
+---
+
+## Restoring Original Factory Firmware
+
+If you ever wish to revert your camera back to factory original behavior:
+
+1. Download the original factory stock firmware update file (`JH_5408*_0F065D55.bin`) from [GitHub Releases](https://github.com/benbadio/keychain-camera-plus/releases).
+2. Copy the file directly to the **ROOT** of your FAT32 MicroSD card.
+3. Insert the card into your powered-off Kodak Charmera.
+4. Turn the camera **ON** and wait for `Upgrade 0%` $\rightarrow$ `100%`.
+5. When complete, **eject the MicroSD card**, then **manually power off the camera** by pressing and holding the Power button.
+6. Turn the camera back **ON**. Your camera is now 100% restored to factory original firmware (standard USB mass storage).
 
 ---
 

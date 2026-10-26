@@ -103,39 +103,68 @@ def main():
         sd_bin_name = sd_bin_path.name
         print(f"[+] Verified and staged SD package: {sd_bin_path}")
 
+    # Stage Factory Stock Restore Package
+    stock_bin_path = None
+    if stock_path.exists():
+        stock_bin_path = Path(pack_firmware(str(stock_path), str(out_dir), timestamp=args.timestamp))
+        print(f"[+] Generated Factory Stock Restore package: {stock_bin_path}")
+    else:
+        release_stock_dir = PROJECT_ROOT / "release" / "stock"
+        stock_candidates = list(release_stock_dir.glob("JH_5408*.bin"))
+        if stock_candidates:
+            stock_cand = sorted(stock_candidates)[-1]
+            stock_bin_path = out_dir / stock_cand.name
+            stock_bin_path.write_bytes(stock_cand.read_bytes())
+            print(f"[+] Staged Factory Stock Restore package: {stock_bin_path}")
+
+    stock_bin_name = stock_bin_path.name if stock_bin_path else "JH_5408_STOCK.bin"
+
     # 3. Create QUICKSTART.md in outdir
     quickstart_content = f"""# Keychain Camera Plus Quickstart 📸✨
 Version: {args.tag}
-File: {sd_bin_name}
+Webcam Firmware: {sd_bin_name}
+Factory Restore: {stock_bin_name}
 
-## ⚡ 3-Step Zero-Hardware Upgrade
+> ⚠️ **Disclaimer**: Modifying device firmware carries inherent risks. While this procedure uses the manufacturer's built-in bootloader and has been tested on real hardware, you do this entirely at your own risk. The authors accept no responsibility for bricked devices, data loss, or hardware damage.
 
-1. **Format MicroSD Card**:
-   - Format a MicroSD card as **FAT32** (MBR).
-   - Ensure the card is empty.
+---
 
-2. **Copy Firmware**:
-   - Copy `{sd_bin_name}` directly to the **ROOT** of your MicroSD card.
-   - *Do NOT rename the file (the camera bootloader verifies the filename checksum).*
-   - Safely eject the card from your computer.
+## ⚡ 1. Installing UVC Webcam Firmware
+1. Format a MicroSD card (up to 32 GB) as **FAT32** (MBR). Ensure the card is empty.
+2. Copy `{sd_bin_name}` directly to the **ROOT** of your MicroSD card.
+   *(Do NOT rename the file - the camera bootloader cryptographically validates the filename checksum).*
+3. Safely eject the card from your computer.
+4. Insert the card into your powered-off Kodak Charmera.
+5. Turn the camera **ON** by pressing the Power button (`Upgrade 0%` -> `100%`).
+6. When the upgrade reaches 100%, **eject the card**, then **manually power off the camera** by pressing and holding the Power button.
+7. Turn the camera back **ON** and plug it into your Mac or PC via USB-C (`GENERAL- UVC`).
 
-3. **In-Camera Upgrade**:
-   - Insert the MicroSD card into the Kodak Charmera and turn it **ON**.
-   - Watch the screen display `Upgrade 0%` -> `100%`.
-   - When the upgrade reaches 100%, **eject the card**, then **manually power off the camera** by pressing and holding the Power button.
-   - Turn the camera back **ON** and plug it into your Mac or PC via USB-C.
-   - Open Photo Booth, QuickTime, Zoom, or FaceTime and select `GENERAL- UVC`!
+---
 
-*(Standalone photo and video shooting on battery remains 100% functional when unplugged!)*
+## 🛡️ 2. Restoring Original Factory Firmware
+If you ever wish to revert your camera back to 100% factory original behavior:
+1. Format your MicroSD card as **FAT32** (MBR).
+2. Copy `{stock_bin_name}` directly to the **ROOT** of your MicroSD card.
+3. Safely eject the card from your computer.
+4. Insert the card into your powered-off Kodak Charmera.
+5. Turn the camera **ON** by pressing the Power button (`Upgrade 0%` -> `100%`).
+6. When the upgrade reaches 100%, **eject the card**, then **manually power off the camera** by pressing and holding the Power button.
+7. Turn the camera back **ON**. Your camera is now 100% restored to factory original stock firmware.
 """
     quickstart_path = out_dir / "QUICKSTART.md"
     quickstart_path.write_text(quickstart_content)
 
     # 4. Generate SHA256SUMS.txt
+    sums_lines = []
     bin_sha = hashlib.sha256(sd_bin_path.read_bytes()).hexdigest()
+    sums_lines.append(f"{bin_sha}  {sd_bin_name}")
+    if stock_bin_path and stock_bin_path.exists():
+        stock_sha = hashlib.sha256(stock_bin_path.read_bytes()).hexdigest()
+        sums_lines.append(f"{stock_sha}  {stock_bin_path.name}")
+
     sums_path = out_dir / "SHA256SUMS.txt"
-    sums_path.write_text(f"{bin_sha}  {sd_bin_name}\n")
-    print(f"[+] Generated SHA256SUMS.txt ({bin_sha[:16]}...)")
+    sums_path.write_text("\n".join(sums_lines) + "\n")
+    print(f"[+] Generated SHA256SUMS.txt")
 
     # 5. Bundle ZIP distribution
     clean_tag = args.tag.lstrip("v")
@@ -144,6 +173,8 @@ File: {sd_bin_name}
     
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         z.write(sd_bin_path, arcname=sd_bin_name)
+        if stock_bin_path and stock_bin_path.exists():
+            z.write(stock_bin_path, arcname=stock_bin_name)
         z.write(quickstart_path, arcname="QUICKSTART.md")
         z.write(sums_path, arcname="SHA256SUMS.txt")
         
@@ -151,9 +182,11 @@ File: {sd_bin_name}
     print(f" [+] Release Bundle Successfully Created!")
     print(f"==========================================================")
     print(f" ZIP:        {zip_path} ({zip_path.stat().st_size:,} bytes)")
-    print(f" BIN:        {sd_bin_path} ({sd_bin_path.stat().st_size:,} bytes)")
-    print(f" SHA-256:    {bin_sha}")
+    print(f" WEBCAM BIN: {sd_bin_path} ({sd_bin_path.stat().st_size:,} bytes)")
+    if stock_bin_path and stock_bin_path.exists():
+        print(f" STOCK BIN:  {stock_bin_path} ({stock_bin_path.stat().st_size:,} bytes)")
     print(f" QUICKSTART: {quickstart_path}")
+
 
     # Remove temporary unpadded patched file
     if temp_patched.exists():

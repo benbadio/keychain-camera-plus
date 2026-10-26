@@ -4,22 +4,24 @@ Turn your **Kodak Charmera** into a vintage, lo-fi **USB-C UVC Webcam** (compati
 
 **Zero Hardware Required**: No screwdrivers, no soldering, no CH341A programmer, no opening the camera case. Just a standard MicroSD card.
 
+> ⚠️ **Disclaimer**: Modifying device firmware carries inherent risks. While this procedure uses the manufacturer's built-in bootloader and has been tested on real hardware, you do this entirely at your own risk. The authors accept no responsibility for bricked devices, data loss, or hardware damage.
+
 ---
 
 ## 🚀 Features
 
-* **Instant USB-C Webcam**: Connect to any Mac, PC, or Linux machine via USB-C to stream live 30 FPS vintage video as `GENERAL - UVC`.
+* **Instant USB-C Webcam**: Connect to any Mac, PC, or Linux machine via USB-C to stream live 30 FPS vintage video as `GENERAL- UVC`.
 * **Retains Standalone Camera Functions**: Unplug the USB cable, and the camera functions normally for taking photos and videos on battery.
 * **Zero-Hardware SD Delivery**: Safe, in-camera firmware update using the factory Generalplus bootloader.
 
 ---
 
-## 📦 Download Packages
+## 📦 Packages
 
 | Package | Filename | Description |
 | :--- | :--- | :--- |
-| **UVC Webcam Edition** (Recommended) | `JH_5408202610211808_0F065EBB.bin` | Clean, 100% verified UVC webcam mod with live sensor pipeline. |
-| **Super Edition** (Webcam + Filters) | `JH_5408202610211809_0F069EA6.bin` | UVC webcam mod + live Left/Right button color filters (Normal, B&W, Sepia, Negative). |
+| **UVC Webcam Edition** | `JH_5408*.bin` (Checksum: `0F065EB9`) | Clean, verified UVC webcam mod. |
+| **Original Factory Restore** | `JH_5408*.bin` (Checksum: `0F065D55`) | 100% factory original firmware rollback package. |
 
 ---
 
@@ -89,9 +91,11 @@ Block 31 is the physical end of the flash (which is already empty padding). The 
 
 ---
 
-## 🛡️ Recovery & Rollback
+## 🛡️ Recovery & Rollback (Restore Factory Firmware)
 
 If you ever wish to restore your camera to 100% factory original state:
-1. Copy the factory stock SD update package `JH_5408202610202000_0F065D55.bin` onto your MicroSD card.
-2. Boot the camera to run the update, eject card, and reboot.
-3. Your camera is returned to factory stock condition.
+1. Download the factory stock firmware update file (`JH_5408*_0F065D55.bin`) from [Releases](https://github.com/benbadio/keychain-camera-plus/releases).
+2. Copy it directly to the **ROOT** of your FAT32 MicroSD card.
+3. Insert the card into your powered-off camera and press the **Power** button (`Upgrade 0%` -> `100%`).
+4. When the upgrade completes, **eject the MicroSD card**, then **manually power off the camera** by pressing and holding the Power button.
+5. Turn the camera back **ON**. Your camera is now completely restored to factory stock firmware.
