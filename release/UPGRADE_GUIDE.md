@@ -1,4 +1,4 @@
-# Kodak Charmera Custom Firmware: Community Zero-Hardware Upgrade Guide 📸✨
+# Kodak Charmera Custom Firmware: Zero-Hardware Upgrade Guide 📸✨
 
 Turn your **Kodak Charmera** into a vintage, lo-fi **USB-C UVC Webcam** (compatible with macOS FaceTime, Photo Booth, Zoom, OBS, Discord, and QuickTime) while retaining full standard digital camera capabilities when unplugged.
 

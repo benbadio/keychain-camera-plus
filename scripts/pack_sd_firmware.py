@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 pack_sd_firmware.py
-Kodak Charmera (Generalplus GPCV1235F) Community SD Firmware Packaging Tool
+Kodak Charmera (Generalplus GPCV1235F) SD Firmware Packaging Tool
 
-Generates community-distributable SD card update files:
+Generates SD card update files:
     JH_5408<YYYYMMDDhhmm>_<CHECKSUM8HEX>.bin
 
 Safe 30-Block Trimming:
@@ -97,7 +97,7 @@ def pack_firmware(input_path: str, output_dir: str, timestamp: str = None, force
     out_file = out_dir / filename
     out_file.write_bytes(data)
 
-    print(f"\n[+] Successfully generated Community SD Firmware Package:")
+    print(f"\n[+] Successfully generated SD Firmware Package:")
     print(f"    Path:     {out_file}")
     print(f"    Filename: {filename}")
     print(f"    Size:     {len(data):,} bytes ({len(data) // 65536} blocks)")
