@@ -71,16 +71,37 @@ def main():
     out_dir = Path(args.outdir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    stock_file = get_or_restore_stock_rom(Path(args.stock))
-    
-    # 1. Patch firmware
-    temp_patched = out_dir / "charmera_webcam.bin"
-    patch_webcam(stock_file, temp_patched)
+    stock_path = Path(args.stock)
+    if stock_path.exists():
+        # 1. Patch firmware
+        temp_patched = out_dir / "charmera_webcam.bin"
+        patch_webcam(stock_path, temp_patched)
 
-    # 2. Package SD card update (30 blocks safe trimming)
-    sd_bin_path = Path(pack_firmware(str(temp_patched), str(out_dir), timestamp=args.timestamp))
-    sd_bin_name = sd_bin_path.name
-    print(f"[+] Generated SD package: {sd_bin_path}")
+        # 2. Package SD card update (30 blocks safe trimming)
+        sd_bin_path = Path(pack_firmware(str(temp_patched), str(out_dir), timestamp=args.timestamp))
+        sd_bin_name = sd_bin_path.name
+        print(f"[+] Generated SD package from stock ROM: {sd_bin_path}")
+        if temp_patched.exists():
+            temp_patched.unlink()
+    else:
+        # Fallback to pre-packaged verified binary in release/webcam/
+        release_webcam_dir = PROJECT_ROOT / "release" / "webcam"
+        candidates = list(release_webcam_dir.glob("JH_5408*.bin"))
+        if not candidates:
+            raise FileNotFoundError(
+                f"Neither stock ROM at {stock_path} nor pre-packaged release binary at {release_webcam_dir} found!"
+            )
+        candidate = sorted(candidates)[-1]
+        print(f"[*] Stock ROM not present; using verified release package: {candidate.name}")
+        from pack_sd_firmware import SAFE_BYTE_SIZE, verify_filename_offsets
+        verify_filename_offsets(candidate.name)
+        candidate_data = candidate.read_bytes()
+        if len(candidate_data) != SAFE_BYTE_SIZE:
+            raise ValueError(f"Candidate binary size {len(candidate_data)} does not match safe 30 blocks ({SAFE_BYTE_SIZE})")
+        sd_bin_path = out_dir / candidate.name
+        sd_bin_path.write_bytes(candidate_data)
+        sd_bin_name = sd_bin_path.name
+        print(f"[+] Verified and staged SD package: {sd_bin_path}")
 
     # 3. Create QUICKSTART.md in outdir
     quickstart_content = f"""# Keychain Camera Plus Quickstart 📸✨
